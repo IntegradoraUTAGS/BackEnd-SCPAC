@@ -9,12 +9,14 @@ const Usuario = require('./usuario');
 let groupSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Pon un nombre']
+        required: [true, 'Pon un nombre valido'],
+        unique: true,
+
     },
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
-        required: true
+
     },
     lessons: {
         type: [Schema.Types.ObjectId],
@@ -24,7 +26,8 @@ let groupSchema = new Schema({
     members: {
         type: [Schema.Types.ObjectId],
         ref: 'Usuario',
-        default: []
+
+        index: true
     },
     status: {
         type: Boolean,
@@ -32,6 +35,9 @@ let groupSchema = new Schema({
 
 
     }
+});
+groupSchema.plugin(uniqueValidator, {
+    message: '{PATH} Need to be unique and different'
 });
 
 module.exports = mongoose.model('Group', groupSchema);

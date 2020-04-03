@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -20,6 +17,9 @@ app.use((req, res, next) => {
     next();
 });
 
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use('/api', require('./routes/index'));
 
 mongoose.connect(process.env.URLDB, {
