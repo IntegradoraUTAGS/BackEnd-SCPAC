@@ -24,7 +24,7 @@ let usuarioSchema = new Schema({
     },
     status: {
         type: Boolean,
-        default: false
+        default: true
     },
     groups: {
         type: [Schema.Types.ObjectId],
