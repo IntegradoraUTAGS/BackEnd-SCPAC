@@ -1,46 +1,38 @@
 require('./config/config');
-const mongoose = require('mongoose');
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 
-// Habilita CORS
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.json());
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, token'
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
     res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+        'Access-Control-Allow-Methods',
+        'GET, POST, PATCH, PUT, DELETE, OPTIONS'
     );
     next();
 });
 
-//parse aplication/ x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}));
+app.use('/api',require('./routes/index'));
 
-//parse formato to aplication/json
-app.use(bodyParser.json());
-
-// agroup archive of routes
-app.use('/api', require('./routes/index'));
-
-//connection to database
-mongoose.connect(process.env.URLDB, 
-{ useNewUrlParser: true, 
-useUnifiedTopology: true, 
-useCreateIndex: true,
-useFindAndModify: false }, 
-
-(err, resp)=>{
-    if(err) throw err;
-
-    console.log('Base de datos Online');
+mongoose.connect(process.env.URLDB, {
+    useNewUrlParser: true,
+    useFindAndModify: true,
+    useCreateIndex: true
+    
+},
+    (err,reps) => {
+        if(err) throw err;
+        console.log('Base de datos online');     
 });
 
-//port 
-app.listen(process.env.PORT, ()=>{
-    console.log("escuchando por el puerto: ", process.env.PORT);
+app.listen(process.env.PORT, () => {
+    console.log('Escuchando por el puerto', process.env.PORT)
 });
